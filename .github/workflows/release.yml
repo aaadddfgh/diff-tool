@@ -1,0 +1,56 @@
+name: release
+
+on:
+  # trigger deployment on every push to master branch
+  push:
+    branches: [master]
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          # fetch all commits to get last updated time or other git log info
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          # choose node.js version to use
+          node-version: 18
+          # cache deps for pnpm
+
+      # - name: Setup pnpm
+      #   uses: pnpm/action-setup@v2
+      #   with:
+      #     # choose pnpm version to use
+      #     version: 6
+      #     # install deps with pnpm
+      #     run_install: true
+      
+
+      - run: npm install 
+
+
+
+      - name: Build
+        run:  npm run build
+      
+      - name: update tag
+        uses: EndBug/latest-tag@latest
+        with:
+          # You can change the name of the tag or branch with this input.
+          # Default: 'latest'
+          ref: latest
+
+
+      - name: Upload files to a GitHub release
+        uses: svenstaro/upload-release-action@2.5.0
+        with:
+            repo_token: ${{ secrets.GITHUB_TOKEN }}
+            file: dist/index.html
+            tag: latest
+            asset_name: diff-tool.html
+            overwrite: true
+            body: "A tool to show differences between two texts"
+      
