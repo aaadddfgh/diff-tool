@@ -153,6 +153,9 @@ del{
 }
 
 @media (min-width: 768px) {
+  .container{
+    min-height: 300px;
+  }
   .input-container:nth-child(4) {
     display: none;
   }
