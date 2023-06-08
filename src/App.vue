@@ -44,7 +44,7 @@ watch([inputLText, inputRText], () => {
     if (i[0] == i[1]) {//纯插入
       repStr.push('<em>' + i[2] + '</em>')
     }
-    if (i[2].length == 0) {// 纯删除
+    else if (i[2].length == 0) {// 纯删除
       repStr.push('<del>' + beforeText.slice(i[0], i[1]) + '</del>')
     }
     else {
@@ -57,6 +57,9 @@ watch([inputLText, inputRText], () => {
     ii++;
   }
   retStr = retStr.replace(/\x89/g, '%')
+
+  retStr = retStr.replace(/\n/g, '&nbsp<br />')
+
   outputText.value = retStr;
 
 })
