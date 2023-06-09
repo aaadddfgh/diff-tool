@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { calcPatch } from 'fast-myers-diff'
-import { ref, watch } from 'vue';
+import {  ref, watch, type TextareaHTMLAttributes, type StyleValue, computed } from 'vue';
 
 
 const inputLText = ref("")
 const inputRText = ref("")
 const outputText = ref("")
+
+const obj:StyleValue={}
 
 /**
  * 将str指定位置positions替换为replaceStr
@@ -64,6 +66,15 @@ watch([inputLText, inputRText], () => {
 
 })
 
+const IL=ref<any>()
+
+const thinCSS=ref('@media (max-width: 768px) { height: '+'100%'+' }');
+const hhh= computed(()=>{
+  return `height: ${IL.value?IL.value.scrollHeight:100}px`;
+})
+function setHeight(){
+  IL.value.style.cssText=`height: ${IL.value?IL.value.scrollHeight-4:130}px `;
+}
 </script>
 
 <template>
@@ -77,19 +88,22 @@ watch([inputLText, inputRText], () => {
 
       <div class="input-container">
         <label class="input-lable">
-          原始文本:
-          <textarea v-model="inputLText"></textarea>
+          <p class="text">原始文本:</p>
+          <div class="input-area" contenteditable="true" v-on:input="(e:any)=>{inputLText=e.target.innerText}" ></div>
         </label>
       </div>
-      <div class="input-container">
+
+      <div class="input-container  output" id="wideOutput">
+        <h4 class="text">差异：</h4>
           <div class="content" v-html="outputText">
           </div>
       </div>
+
       <div class="input-container">
 
         <label class="input-lable">
           修改后文本:
-          <textarea v-model="inputRText"></textarea>
+          <div class="input-area" contenteditable="true" v-on:input="(e:any)=>{inputRText=e.target.innerText}" ></div>
         </label>
 
 
@@ -105,6 +119,18 @@ watch([inputLText, inputRText], () => {
 </template>
 
 <style>
+#wideOutput {
+ margin: 10px 0;
+}
+
+.text{
+  margin: 0;
+}
+
+.output{
+  border-left: 1px dashed rgb(187, 187, 187);
+  border-right: 1px dashed rgb(187, 187, 187);
+}
 .container {
   display: flex;
   flex-wrap: wrap;
@@ -115,7 +141,7 @@ watch([inputLText, inputRText], () => {
 
 .input-container {
   margin: 10px;
-  flex-basis: calc(33.33% - 20px);
+  flex-basis: calc(33.33% - 21px);
   flex-direction: column;
   display: flex;
 }
@@ -128,6 +154,8 @@ watch([inputLText, inputRText], () => {
   height: 100%;
   display: flex;    
   flex-direction: column;
+  font-family: auto;
+  margin-top: 10px;
 }
 
 .scrollable {
@@ -138,11 +166,25 @@ watch([inputLText, inputRText], () => {
 .content {
   padding: 10px;
   word-break: break-word;
+  margin-top: 0;
+  
+}
+
+.input-area{
+  word-break: break-word;
+  padding: 2px;
+  border: 1px solid black;
+  margin: 0 5px;
+  cursor: text;
+  min-height: 150px;
 }
 
 textarea {
   resize: none;
   height: 100%;
+  font-size: 16px;
+  font-family: auto;
+  margin: 0 5px;
 }
 
 em{
@@ -155,6 +197,10 @@ del{
   background-color: lightpink;
 }
 
+/*
+
+*/
+
 @media (min-width: 768px) {
   .container{
     min-height: 300px;
@@ -163,10 +209,12 @@ del{
     display: none;
   }
   .content {
-    max-width: calc(100% - 40px);
+    max-width: calc(100% - 20px);
     
   }
-
+  textarea{
+    height: 100%;
+  }
 }
 
 @media (max-width: 768px) {
