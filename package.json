@@ -11,13 +11,13 @@
   },
   "dependencies": {
     "fast-myers-diff": "^3.1.0",
-    "printf": "^0.6.1",
     "vite-plugin-singlefile": "^0.13.5",
-    "vue": "^3.3.2"
+    "vue": "^3.3.2",
+    "vue-i18n": "^9.2.2"
   },
   "devDependencies": {
     "@tsconfig/node18": "^2.0.1",
-    "@types/node": "^18.16.8",
+    "@types/node": "^18.16.19",
     "@vitejs/plugin-vue": "^4.2.3",
     "@vitejs/plugin-vue-jsx": "^3.0.1",
     "@vue/tsconfig": "^0.4.0",

@@ -1,100 +1,67 @@
 <script setup lang="ts">
-import { calcPatch } from 'fast-myers-diff'
-import {  ref, watch, type TextareaHTMLAttributes, type StyleValue, computed } from 'vue';
 
+import { getCurrentInstance, ref, watch, type ComponentInternalInstance, inject } from 'vue';
+
+import { getHtmlStr,compareResult } from '@/lib/StrLib'
+
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 const inputLText = ref("")
 const inputRText = ref("")
 const outputText = ref("")
 
-const obj:StyleValue={}
+const lang=[
 
-/**
- * 将str指定位置positions替换为replaceStr
- * @param str 
- * @param positions 
- * @param replaceStr 
- */
-function replaceString(str: string, positions: [number, number, string][], replaceStr: string) {
-  let result = '';
-  let lastIndex = 0;
-  for (let i = 0; i < positions.length; i++) {
-    const [start, end] = positions[i];
-    result += str.slice(lastIndex, start) + replaceStr;
-    lastIndex = end;
-  }
-  result += str.slice(lastIndex);
-  return result;
-}
+]
 
-watch([inputLText, inputRText], () => {
+watch([inputLText, inputRText], ([textL,textR]) => {
 
-  const beforeText = inputLText.value.concat().replace(/%/g, "\x89")
-
-  const ret = calcPatch(beforeText, inputRText.value.concat().replace(/%/g, "\x89"));
-  let retStr = beforeText
-  let bb: [number, number, string][] = []
-  for (const i of ret) {
-    bb.push(i)
-  }
-
-  retStr = replaceString(retStr, bb, "%s");
-
-  let repStr: string[] = []
-
-  for (const i of bb) {
-    if (i[0] == i[1]) {//纯插入
-      repStr.push('<em>' + i[2] + '</em>')
-    }
-    else if (i[2].length == 0) {// 纯删除
-      repStr.push('<del>' + beforeText.slice(i[0], i[1]) + '</del>')
-    }
-    else {
-      repStr.push('<em>' + i[2] + '</em>' + '<del>' + beforeText.slice(i[0], i[1]) + '</del>')
-    }
-  }
-  let ii = 0;
-  while (retStr.match("%s")) {
-    retStr = retStr.replace("%s", repStr[ii])
-    ii++;
-  }
-  retStr = retStr.replace(/\x89/g, '%')
-
-  retStr = retStr.replace(/\n/g, '&nbsp<br />')
-
-  outputText.value = retStr;
+  outputText.value = compareResult(textL,textR);
 
 })
+const { locale } = useI18n({ useScope: 'global' });
 
-const IL=ref<any>()
+const langChange=(e: any)=>
+        {
+          
+          try{
+            const loc1 :string = ((e as any).target.value.split("-"))[0];
+            
+            locale.value = loc1; // change!
+          }
+          catch(err){
+            locale.value="zh-CN"
+          }
+          
+        }
 
-const thinCSS=ref('@media (max-width: 768px) { height: '+'100%'+' }');
-const hhh= computed(()=>{
-  return `height: ${IL.value?IL.value.scrollHeight:100}px`;
-})
-function setHeight(){
-  IL.value.style.cssText=`height: ${IL.value?IL.value.scrollHeight-4:130}px `;
-}
 </script>
 
 <template>
   <div>
     <div>
-      <h2>文本差异比较</h2>
-      <p style="color: red;">不适用于xml</p>
+      <h2>{{ t('标题') }}</h2>
+
+      <select @change="langChange"
+      >
+        <option value="zh-CN">简体中文</option>
+        <option value="en">English</option>
+      </select>
+      <p style="color: red;">{{ t('警告') }}</p>
     </div>
     
     <div class="container">
 
       <div class="input-container">
         <label class="input-lable">
-          <p class="text">原始文本:</p>
-          <div class="input-area" contenteditable="true" v-on:input="(e:any)=>{inputLText=e.target.innerText}" ></div>
+          <p class="text">{{ t('原始文本') }}</p>
+          <div class="input-area" contenteditable="true" v-on:input="(e:any)=>{inputLText=getHtmlStr(e.target.innerHTML)}" ></div>
         </label>
       </div>
 
       <div class="input-container  output" id="wideOutput">
-        <h4 class="text">差异：</h4>
+        <h4 class="text">{{ t('差异') }}</h4>
           <div class="content" v-html="outputText">
           </div>
       </div>
@@ -102,14 +69,13 @@ function setHeight(){
       <div class="input-container">
 
         <label class="input-lable">
-          修改后文本:
-          <div class="input-area" contenteditable="true" v-on:input="(e:any)=>{inputRText=e.target.innerText}" ></div>
+          {{ t('修改后文本') }}
+          <div class="input-area" contenteditable="true" v-on:input="(e:any)=>{inputRText=getHtmlStr(e.target.innerHTML)}" ></div>
         </label>
-
 
       </div>
       <div class="input-container">
-        <h4 style="margin: 0;  width: 100%;">差异：</h4>
+        <h4 style="margin: 0;  width: 100%;">{{ t('差异') }}</h4>
         <div v-html="outputText" class="content">
 
         </div>
