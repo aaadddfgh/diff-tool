@@ -42,8 +42,8 @@ const langChange=(e: any)=>
   <div>
     <div>
       <h2>{{ t('标题') }}</h2>
-
-      <select @change="langChange"
+      <label  for="language">language&nbsp;</label>
+      <select @change="langChange" name="language"
       >
         <option value="zh-CN">简体中文</option>
         <option value="en">English</option>
@@ -143,6 +143,10 @@ const langChange=(e: any)=>
   margin: 0 5px;
   cursor: text;
   min-height: 150px;
+}
+
+label{
+  font-size: 0.6rem;
 }
 
 textarea {
