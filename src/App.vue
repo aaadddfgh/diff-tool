@@ -183,10 +183,7 @@ const langChange = (e: any) => {
 }
 
 
-del {
-  color: palevioletred;
-  background-color: lightpink;
-}
+
 
 /*
 

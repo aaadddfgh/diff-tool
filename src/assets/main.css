@@ -18,3 +18,8 @@ em{
   color: green;
   background-color: lightblue;
 }
+
+del {
+  color: palevioletred;
+  background-color: lightpink;
+}
