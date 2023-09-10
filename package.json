@@ -10,12 +10,13 @@
     "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false"
   },
   "dependencies": {
+    "bootstrap": "^4.6.2",
     "fast-myers-diff": "^3.1.0",
-    "vite-plugin-singlefile": "^0.13.5",
     "vue": "^3.3.2",
     "vue-i18n": "^9.2.2"
   },
   "devDependencies": {
+    "vite-plugin-singlefile": "^0.13.5",
     "@tsconfig/node18": "^2.0.1",
     "@types/node": "^18.16.19",
     "@vitejs/plugin-vue": "^4.2.3",

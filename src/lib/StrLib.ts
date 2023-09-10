@@ -11,6 +11,18 @@ function getHtmlStr(str: string) {
 }
 
 /**
+ * 转义字符串
+ * @param str 
+ * @returns string
+ */
+function getStr(str: string) {
+  const ret = str.replace(/</g,'').replace(/<br>/g, "\n");
+
+  return ret;
+
+}
+
+/**
  * 将str指定位置positions替换为replaceStr
  * @param str 
  * @param positions 
@@ -37,9 +49,10 @@ import { calcPatch } from 'fast-myers-diff'
  * @returns result
  */
 function compareResult(textL: string, textR: string) {
-  const beforeText = textL.replace(/%/g, "\x89")
+  const beforeText = textL.replace(/%/g, "\x89")//.replace(/</g,'&lt;').replace(/</g,'&gt;')
+  
 
-  const ret = calcPatch(beforeText, textR.replace(/%/g, "\x89"));
+  const ret = calcPatch(beforeText, textR.replace(/%/g, "\x89")/*.replace(/</g,'&lt;').replace(/</g,'&gt;')*/);
   let retStr = beforeText
   let bb: [number, number, string][] = []
   for (const i of ret) {
@@ -47,6 +60,8 @@ function compareResult(textL: string, textR: string) {
   }
 
   retStr = replaceString(retStr, bb, "%s");
+
+  retStr=retStr.replace(/</g,'&lt;').replace(/</g,'&gt;');
 
   let repStr: string[] = []
 

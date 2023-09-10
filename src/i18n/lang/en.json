@@ -3,5 +3,8 @@
     "警告":"Not applicable to XML",
     "原始文本":"Original Text:",
     "差异":"Differences:",
-    "修改后文本":"Modified Text:"
+    "修改后文本":"Modified Text:",
+    "语法检查":"check spell",
+    "启用":"enable",
+    "禁用":"disable"
 }

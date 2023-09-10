@@ -3,7 +3,6 @@ import LangZHCN from '../i18n/lang/zh-cn.json'
 //@ts-ignore
 import LangEN from '../i18n/lang/en.json'
 
-
 import { createI18n } from "vue-i18n";
 
 const i18n =createI18n({
@@ -16,7 +15,5 @@ const i18n =createI18n({
         'en':{...LangEN}
     }
 })
-
-
 
 export default i18n
